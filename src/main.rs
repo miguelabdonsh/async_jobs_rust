@@ -1,6 +1,7 @@
 mod routes;
 mod models;
-
+mod handlers;
+mod dto;
 
 #[tokio::main]
 async fn main() {
