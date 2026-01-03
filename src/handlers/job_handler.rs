@@ -18,15 +18,18 @@ pub async fn create_job(
         status: "Pending".to_string(),
         task_type: input.task_type,
         payload: input.payload,
+        result: None,
     };
 
     state.jobs.lock().await.insert(job_id, job.clone());
+    let _ = state.job_sender.send(job_id).await;
 
     let response = JobResponse {
         id: job.id,
         status: job.status,
         task_type: Some(job.task_type),
         payload: Some(job.payload),
+        result: job.result,
     };
 
     return Json(response);
@@ -45,6 +48,7 @@ pub async fn get_job_status(
             status: job.status.clone(),
             task_type: Some(job.task_type.clone()),
             payload: Some(job.payload.clone()),
+            result: job.result.clone(),
         };
         return Json(response).into_response();
     } else {
@@ -65,6 +69,7 @@ pub async fn list_jobs(
         status: job.status.clone(),
         task_type: Some(job.task_type.clone()),
         payload: Some(job.payload.clone()),
+        result: job.result.clone(),
     }).collect();
 
     return Json(response);

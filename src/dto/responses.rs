@@ -7,6 +7,7 @@ pub struct JobResponse {
     pub status: String,
     pub task_type: Option<String>,
     pub payload: Option<String>,
+    pub result: Option<String>,
 }
 
 #[derive(Serialize)]
